@@ -1,0 +1,50 @@
+{
+  "name": "@magma73/modal-react-typescript",
+  "description": "A simple and customizable modal component for React applications.",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/modal.umd.cjs",
+  "module": "./dist/modal.js",
+  "exports": {
+    ".": {
+      "import": "./dist/modal.js",
+      "require": "./dist/modal.umd.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "modal",
+    "dialog"
+  ],
+  "author": "Marine Magnin",
+  "licence": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "path": "^0.12.7",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
