@@ -1,129 +1,122 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from "react";
+// import { useEffect } from "react";
+// import { useRef } from "react";
+import genericHandleKey from "../utils/events";
 import styles from "./Modal.module.css";
 import closeIcon from "./closeIcon.svg";
 
-interface ModalItem extends PropsWithChildren<{
-    isOpen: boolean,
-    onClose : () => void,
-    title : string,
-    titleClose : string,
-    customModal? : React.CSSProperties,
-    customContainerInformations? : React.CSSProperties,
-    customTitle? : React.CSSProperties,
-    customBtnClose? : React.CSSProperties,
-    customIconClose?: React.CSSProperties,
-    showCloseIcon : boolean,
-}> {}
+interface ModalItem
+  extends PropsWithChildren<{
+    onClose: () => void;
+    title: string;
+    titleClose: string;
+    customModal?: React.CSSProperties;
+    customContainerInformations?: React.CSSProperties;
+    customTitle?: React.CSSProperties;
+    customBtnClose?: React.CSSProperties;
+    customIconClose?: React.CSSProperties;
+    showCloseIcon: boolean;
+  }> {}
 
-const Modal : React.FunctionComponent<ModalItem> =
-({
-    isOpen,
-    onClose,
-    title,
-    titleClose,
-    children,
-    customModal,
-    customContainerInformations,
-    customTitle,
-    customBtnClose,
-    customIconClose,
-    showCloseIcon = true,
+const Modal: React.FunctionComponent<ModalItem> = ({
+  onClose,
+  title,
+  titleClose,
+  children,
+  customModal,
+  customContainerInformations,
+  customTitle,
+  customBtnClose,
+  customIconClose,
+  showCloseIcon = true,
 }) => {
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-            onClose();
-        }
-    };
-
-    const handleIconKeyDown = (event : React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            onClose();
-        }
-    }
-
-if (isOpen) {
-window.addEventListener('keydown', handleKeyDown);
-
-
-setTimeout(() => {
-    const dialogElement = document.querySelector('[role="dialog"]') as HTMLElement;
-    if (dialogElement) {
-        const focusableElements = dialogElement.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        ) ;
-        const firstFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-        const lastFocusableElement = focusableElements[0] as HTMLElement;
-        firstFocusableElement.focus();
-
-        // Handle tab key event to maintain focus within the modal
-        const handleKeyDownTab = (event : KeyboardEvent) => {
-            if (event.key === 'Tab') {
-                if (event.shiftKey) {
-                    if (document.activeElement === firstFocusableElement) {
-                        event.preventDefault();
-                        lastFocusableElement.focus();
-                    }
-                } else {
-                    if (document.activeElement === lastFocusableElement) {
-                        event.preventDefault();
-                        firstFocusableElement.focus();
-                    }
-                }
-            }
-        };
-        dialogElement.addEventListener('keydown', handleKeyDownTab);
-    }
-}, 100);
+  // const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
+  // const lastFocusableElementRef = useRef<HTMLImageElement>(null);
 
 
 
+  // useEffect(() => {
+  //   console.log("Le composant est monté");
+  //   return () => {
+  //     console.log("Le composant est démonté");
+  //   };
+  // }, []);
 
-        return (
-            <dialog
-                open={isOpen}
-                className={`${styles.modal} ${customModal}`}
-                aria-modal="true"
-                tabIndex={-1}
-                role="dialog"
-            >
-                <div className={`${styles.containerInformations} ${customContainerInformations}`}>
-                    <h2 className={`${styles.title} ${customTitle}`}>{title}</h2>
+  const handleEnterKey = genericHandleKey(onClose, "Enter");
 
-                    {children}
+  // useEffect(() => {
+  //   const handleEscapeKey = genericHandleKey(onClose, "Escape");
 
-                    <button
-                        id="btnClose"
-                        className={`${styles.btnClose} ${customBtnClose}`}
-                        onClick={onClose}
-                        aria-label="Close Modal"
-                        tabIndex={2}
-                    >
-                        {titleClose}
-                    </button>
-                    {showCloseIcon && (
-                        <img
-                            id="closeIcon"
-                            className={`${styles.picture} ${customIconClose}`}
-                            src={closeIcon}
-                            alt="Close"
-                            onClick={onClose}
-                            onKeyDown={handleIconKeyDown}
-                            aria-label="Close Modal"
-                            tabIndex={1}
-                        />
-                    )}
-                </div>
+    // if (firstFocusableElementRef.current && lastFocusableElementRef.current) {
+    //   const handleKeyDownTab = (event: KeyboardEvent) => {
+    //     if (event.key === "Tab") {
+    //       if (
+    //         event.shiftKey &&
+    //         document.activeElement === firstFocusableElementRef.current
+    //       ) {
+    //         // Si l'utilisateur appuie sur Tab en maintenant la touche Shift sur le premier élément focusable,
+    //         // le focus est déplacé vers le dernier élément focusable.
+    //         event.preventDefault();
+    //         lastFocusableElementRef.current?.focus();
+    //       } else if (
+    //         !event.shiftKey &&
+    //         document.activeElement === lastFocusableElementRef.current
+    //       ) {
+    //         // Si l'utilisateur appuie simplement sur Tab sur le dernier élément focusable,
+    //         // le focus est déplacé vers le premier élément focusable.
+    //         event.preventDefault();
+    //         firstFocusableElementRef.current?.focus();
+    //       }
+    //     }
+    //   };
+    //   /*document.addEventListener("keydown", handleKeyDown);*/
+    //   document.addEventListener("keydown", handleEscapeKey);
+    //   document.addEventListener("keydown", handleKeyDownTab);
+    // document.addEventListener("keydown", handleEscapeKey);
+    //   return () => {
+    //     /*document.removeEventListener("keydown", handleKeyDown);*/
+    //     document.removeEventListener("keydown", handleEscapeKey);
+    //     document.removeEventListener("keydown", handleKeyDownTab);
+    //   };
+    // }
+  // }, [onClose]);
 
-            </dialog>
-        );
-    }else {
-            // Remove event listener for key down event when modal is closed
-            window.removeEventListener('keydown', handleKeyDown);
-            return null;
-        }
+  return (
+    <div
+      className={`${styles.modal} ${customModal}`}
+      tabIndex={-1}
+
+    >
+      <div
+        className={`${styles.containerInformations} ${customContainerInformations}`}
+      >
+        <h2 className={`${styles.title} ${customTitle}`}>{title}</h2>
+        {children}
+        <button
+          // ref={firstFocusableElementRef}
+          onClick={onClose}
+          className={`${styles.btnClose} ${customBtnClose}`}
+          tabIndex={1}
+        >
+          {titleClose}
+        </button>
+        {showCloseIcon && (
+          <img
+          id="closeIcon"
+          className={`${styles.picture} ${customIconClose}`}
+          src={closeIcon}
+          alt="Close"
+          aria-label="Close Modal"
+          // ref={lastFocusableElementRef}
+          onClick={onClose}
+          onKeyDown={(handleEnterKey as unknown) as React.KeyboardEventHandler<HTMLImageElement>}
+          tabIndex={0}
+      />
+        )}
+      </div>
+    </div>
+  );
 };
-
 
 export default Modal;
