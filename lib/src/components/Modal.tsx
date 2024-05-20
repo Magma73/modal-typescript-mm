@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from "react";
-// import { useEffect } from "react";
-// import { useRef } from "react";
+import React, { useEffect, PropsWithChildren } from "react";
+// import {  } from "react";
+import { useRef } from "react";
 import genericHandleKey from "../utils/events";
 import styles from "./Modal.module.css";
 import closeIcon from "./closeIcon.svg";
@@ -34,16 +34,21 @@ const Modal: React.FunctionComponent<ModalItem> = ({
   // const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
   // const lastFocusableElementRef = useRef<HTMLImageElement>(null);
 
+  // const handleEnterKey = genericHandleKey(onClose, "Enter");
 
 
   // useEffect(() => {
-  //   console.log("Le composant est monté");
-  //   return () => {
-  //     console.log("Le composant est démonté");
-  //   };
-  // }, []);
+  //     console.log("Coucou");
+  // });
+//     maFunction();
 
-  const handleEnterKey = genericHandleKey(onClose, "Enter");
+
+// // let maVariable = "coucou";
+//     // return () => {
+//       // console.log("Le composant est démonté");
+//     // };
+//   }, []);
+
 
   // useEffect(() => {
   //   const handleEscapeKey = genericHandleKey(onClose, "Escape");
@@ -82,6 +87,61 @@ const Modal: React.FunctionComponent<ModalItem> = ({
     // }
   // }, [onClose]);
 
+
+  const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
+  const lastFocusableElementRef = useRef<HTMLImageElement>(null);
+
+  const handleEnterKey = genericHandleKey(onClose, "Enter");
+
+  useEffect(() => {
+    /*const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose(); // Appeler la fonction de fermeture interne
+      }
+    };*/
+    const handleEscapeKey = genericHandleKey(onClose, "Escape");
+
+    if (firstFocusableElementRef.current && lastFocusableElementRef.current) {
+      const handleKeyDownTab = (event: KeyboardEvent) => {
+        if (event.key === "Tab") {
+          if (
+            event.shiftKey &&
+            document.activeElement === firstFocusableElementRef.current
+          ) {
+            // Si l'utilisateur appuie sur Tab en maintenant la touche Shift sur le premier élément focusable,
+            // le focus est déplacé vers le dernier élément focusable.
+            event.preventDefault();
+            lastFocusableElementRef.current?.focus();
+          } else if (
+            !event.shiftKey &&
+            document.activeElement === lastFocusableElementRef.current
+          ) {
+            // Si l'utilisateur appuie simplement sur Tab sur le dernier élément focusable,
+            // le focus est déplacé vers le premier élément focusable.
+            event.preventDefault();
+            firstFocusableElementRef.current?.focus();
+          }
+        }
+      };
+      /*document.addEventListener("keydown", handleKeyDown);*/
+      document.addEventListener("keydown", handleEscapeKey);
+      document.addEventListener("keydown", handleKeyDownTab);
+
+      return () => {
+        /*document.removeEventListener("keydown", handleKeyDown);*/
+        document.removeEventListener("keydown", handleEscapeKey);
+        document.removeEventListener("keydown", handleKeyDownTab);
+      };
+    }
+  }, [firstFocusableElementRef, lastFocusableElementRef, onClose]);
+
+
+
+
+
+
+
+
   return (
     <div
       className={`${styles.modal} ${customModal}`}
@@ -94,7 +154,7 @@ const Modal: React.FunctionComponent<ModalItem> = ({
         <h2 className={`${styles.title} ${customTitle}`}>{title}</h2>
         {children}
         <button
-          // ref={firstFocusableElementRef}
+          ref={firstFocusableElementRef}
           onClick={onClose}
           className={`${styles.btnClose} ${customBtnClose}`}
           tabIndex={1}
@@ -108,7 +168,7 @@ const Modal: React.FunctionComponent<ModalItem> = ({
           src={closeIcon}
           alt="Close"
           aria-label="Close Modal"
-          // ref={lastFocusableElementRef}
+          ref={lastFocusableElementRef}
           onClick={onClose}
           onKeyDown={(handleEnterKey as unknown) as React.KeyboardEventHandler<HTMLImageElement>}
           tabIndex={0}
