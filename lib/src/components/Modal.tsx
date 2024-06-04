@@ -1,7 +1,5 @@
-import React, { useEffect, PropsWithChildren, ReactNode  } from "react";
-// import {  } from "react";
-// import { useRef } from "react";
-// import genericHandleKey from "../utils/events";
+import { useEffect, useCallback, PropsWithChildren, ReactNode  } from "react";
+import { useRef } from "react";
 import styles from "./Modal.module.css";
 import closeIcon from "./closeIcon.svg";
 
@@ -11,15 +9,15 @@ interface ModalItem
     title: string;
     titleClose: string;
     children?:ReactNode;
-    customModal?: React.CSSProperties;
-    customContainerInformations?: React.CSSProperties;
-    customTitle?: React.CSSProperties;
-    customBtnClose?: React.CSSProperties;
-    customIconClose?: React.CSSProperties;
-    showCloseIcon: boolean;
+    customModal?: string;
+    customContainerInformations?: string;
+    customTitle?: string;
+    customBtnClose?: string;
+    customIconClose?: string;
+    showCloseIcon?: boolean;
   }> {}
 
-const Modal: React.FunctionComponent<ModalItem> = ({
+const Modal = ({
   onClose,
   title,
   titleClose,
@@ -30,124 +28,63 @@ const Modal: React.FunctionComponent<ModalItem> = ({
   customBtnClose,
   customIconClose,
   showCloseIcon = true,
-}) => {
+} : ModalItem) => {
 
-  // const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
-  // const lastFocusableElementRef = useRef<HTMLImageElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
+  const lastFocusableElementRef = useRef<HTMLImageElement>(null);
 
-  // const handleEnterKey = genericHandleKey(onClose, "Enter");
-
-
-  useEffect(() => {
-      console.log("Coucou");
-  });
-//     maFunction();
-
-
-// // let maVariable = "coucou";
-//     // return () => {
-//       // console.log("Le composant est démonté");
-//     // };
-//   }, []);
+useEffect(() => {
+  if(firstFocusableElementRef && lastFocusableElementRef) {
+  const firstFocusableElement = firstFocusableElementRef.current;
+  if(firstFocusableElement !==null) {
+  firstFocusableElement.focus();
+  }
+}
+}, [onClose]);
 
 
-  // useEffect(() => {
-  //   const handleEscapeKey = genericHandleKey(onClose, "Escape");
+const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    // if tab key is tapped on the last
+    // focus on the first
+    // Warning! need to check e.current if a child of lastFocusable
 
-    // if (firstFocusableElementRef.current && lastFocusableElementRef.current) {
-    //   const handleKeyDownTab = (event: KeyboardEvent) => {
-    //     if (event.key === "Tab") {
-    //       if (
-    //         event.shiftKey &&
-    //         document.activeElement === firstFocusableElementRef.current
-    //       ) {
-    //         // Si l'utilisateur appuie sur Tab en maintenant la touche Shift sur le premier élément focusable,
-    //         // le focus est déplacé vers le dernier élément focusable.
-    //         event.preventDefault();
-    //         lastFocusableElementRef.current?.focus();
-    //       } else if (
-    //         !event.shiftKey &&
-    //         document.activeElement === lastFocusableElementRef.current
-    //       ) {
-    //         // Si l'utilisateur appuie simplement sur Tab sur le dernier élément focusable,
-    //         // le focus est déplacé vers le premier élément focusable.
-    //         event.preventDefault();
-    //         firstFocusableElementRef.current?.focus();
-    //       }
-    //     }
-    //   };
-    //   /*document.addEventListener("keydown", handleKeyDown);*/
-    //   document.addEventListener("keydown", handleEscapeKey);
-    //   document.addEventListener("keydown", handleKeyDownTab);
-    // document.addEventListener("keydown", handleEscapeKey);
-    //   return () => {
-    //     /*document.removeEventListener("keydown", handleKeyDown);*/
-    //     document.removeEventListener("keydown", handleEscapeKey);
-    //     document.removeEventListener("keydown", handleKeyDownTab);
-    //   };
-    // }
-  // }, [onClose]);
+    if (
+      document.activeElement === lastFocusableElementRef.current &&
+      e.key === "Tab" &&
+      !e.shiftKey
+    ) {
+      e.preventDefault();
+      firstFocusableElementRef.current?.focus();
+    }
+    if (
+      document.activeElement === firstFocusableElementRef.current &&
+      e.key === "Tab" &&
+      e.shiftKey
+    ) {
+      e.preventDefault();
+      lastFocusableElementRef.current?.focus();
+    }
+
+    if (e.key === "Escape") {
+      onClose();
+    }
+  }, [onClose]);
 
 
-  // const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
-  // const lastFocusableElementRef = useRef<HTMLImageElement>(null);
-
-  // const handleEnterKey = genericHandleKey(onClose, "Enter");
-
-  // useEffect(() => {
-  //   /*const handleKeyDown = (event: KeyboardEvent) => {
-  //     if (event.key === "Escape") {
-  //       onClose(); // Appeler la fonction de fermeture interne
-  //     }
-  //   };*/
-  //   const handleEscapeKey = genericHandleKey(onClose, "Escape");
-
-  //   if (firstFocusableElementRef.current && lastFocusableElementRef.current) {
-  //     const handleKeyDownTab = (event: KeyboardEvent) => {
-  //       if (event.key === "Tab") {
-  //         if (
-  //           event.shiftKey &&
-  //           document.activeElement === firstFocusableElementRef.current
-  //         ) {
-  //           // Si l'utilisateur appuie sur Tab en maintenant la touche Shift sur le premier élément focusable,
-  //           // le focus est déplacé vers le dernier élément focusable.
-  //           event.preventDefault();
-  //           lastFocusableElementRef.current?.focus();
-  //         } else if (
-  //           !event.shiftKey &&
-  //           document.activeElement === lastFocusableElementRef.current
-  //         ) {
-  //           // Si l'utilisateur appuie simplement sur Tab sur le dernier élément focusable,
-  //           // le focus est déplacé vers le premier élément focusable.
-  //           event.preventDefault();
-  //           firstFocusableElementRef.current?.focus();
-  //         }
-  //       }
-  //     };
-  //     /*document.addEventListener("keydown", handleKeyDown);*/
-  //     document.addEventListener("keydown", handleEscapeKey);
-  //     document.addEventListener("keydown", handleKeyDownTab);
-
-  //     return () => {
-  //       /*document.removeEventListener("keydown", handleKeyDown);*/
-  //       document.removeEventListener("keydown", handleEscapeKey);
-  //       document.removeEventListener("keydown", handleKeyDownTab);
-  //     };
-  //   }
-  // }, [firstFocusableElementRef, lastFocusableElementRef, onClose]);
-
-
-
-
-
-
+  const handleEnterKey = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      onClose();
+    }
+  };
 
 
   return (
     <div
       className={`${styles.modal} ${customModal}`}
       tabIndex={-1}
-
+      ref={modalRef}
+      onKeyDown={handleKeyDown}
     >
       <div
         className={`${styles.containerInformations} ${customContainerInformations}`}
@@ -155,7 +92,7 @@ const Modal: React.FunctionComponent<ModalItem> = ({
         <h2 className={`${styles.title} ${customTitle}`}>{title}</h2>
         {children}
         <button
-          // ref={firstFocusableElementRef}
+          ref={firstFocusableElementRef}
           onClick={onClose}
           className={`${styles.btnClose} ${customBtnClose}`}
           tabIndex={1}
@@ -169,10 +106,10 @@ const Modal: React.FunctionComponent<ModalItem> = ({
           src={closeIcon}
           alt="Close"
           aria-label="Close Modal"
-          // ref={lastFocusableElementRef}
+          ref={lastFocusableElementRef}
           onClick={onClose}
-          // onKeyDown={(handleEnterKey as unknown) as React.KeyboardEventHandler<HTMLImageElement>}
-          tabIndex={0}
+          onKeyDown={handleEnterKey}
+          tabIndex={2}
       />
         )}
       </div>
