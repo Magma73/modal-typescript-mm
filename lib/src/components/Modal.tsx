@@ -85,6 +85,7 @@ const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       tabIndex={-1}
       ref={modalRef}
       onKeyDown={handleKeyDown}
+      data-testid="modal"
     >
       <div
         className={`${styles.containerInformations} ${customContainerInformations}`}
