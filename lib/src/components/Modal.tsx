@@ -1,5 +1,4 @@
-import { useEffect, useCallback, PropsWithChildren, ReactNode  } from "react";
-import { useRef } from "react";
+import { useEffect, useRef, useCallback, PropsWithChildren, ReactNode  } from "react";
 import styles from "./Modal.module.css";
 import closeIcon from "./closeIcon.svg";
 

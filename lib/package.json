@@ -2,7 +2,7 @@
   "name": "@magma73/modal-react-typescript",
   "description": "A simple and customizable modal component for React or Typescript applications.",
   "private": false,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "files": [
     "dist"
