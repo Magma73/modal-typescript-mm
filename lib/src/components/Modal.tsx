@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, PropsWithChildren, ReactNode  } from "react";
+import { useEffect, useRef, PropsWithChildren, ReactNode } from "react";
 import styles from "./Modal.module.css";
 import closeIcon from "./closeIcon.svg";
 
@@ -7,7 +7,7 @@ interface ModalItem
     onClose: () => void;
     title: string;
     titleClose: string;
-    children?:ReactNode;
+    children?: ReactNode;
     customModal?: string;
     customContainerInformations?: string;
     customTitle?: string;
@@ -27,23 +27,21 @@ const Modal = ({
   customBtnClose,
   customIconClose,
   showCloseIcon = true,
-} : ModalItem) => {
-
+}: ModalItem) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
   const lastFocusableElementRef = useRef<HTMLImageElement>(null);
 
-useEffect(() => {
-  if(firstFocusableElementRef && lastFocusableElementRef) {
-  const firstFocusableElement = firstFocusableElementRef.current;
-  if(firstFocusableElement !==null) {
-  firstFocusableElement.focus();
-  }
-}
-}, [onClose]);
+  useEffect(() => {
+    if (firstFocusableElementRef && lastFocusableElementRef) {
+      const firstFocusableElement = firstFocusableElementRef.current;
+      if (firstFocusableElement !== null) {
+        firstFocusableElement.focus();
+      }
+    }
+  }, [onClose]);
 
-
-const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     // if tab key is tapped on the last
     // focus on the first
     // Warning! need to check e.current if a child of lastFocusable
@@ -68,15 +66,13 @@ const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       onClose();
     }
-  }, [onClose]);
-
+  };
 
   const handleEnterKey = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       onClose();
     }
   };
-
 
   return (
     <div
@@ -101,16 +97,16 @@ const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
         </button>
         {showCloseIcon && (
           <img
-          id="closeIcon"
-          className={`${styles.picture} ${customIconClose}`}
-          src={closeIcon}
-          alt="Close"
-          aria-label="Close Modal"
-          ref={lastFocusableElementRef}
-          onClick={onClose}
-          onKeyDown={handleEnterKey}
-          tabIndex={2}
-      />
+            id="closeIcon"
+            className={`${styles.picture} ${customIconClose}`}
+            src={closeIcon}
+            alt="Close"
+            aria-label="Close Modal"
+            ref={lastFocusableElementRef}
+            onClick={onClose}
+            onKeyDown={handleEnterKey}
+            tabIndex={2}
+          />
         )}
       </div>
     </div>
